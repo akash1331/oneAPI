@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Sentiment Analysis using LDA and SVR</title>
+  </head>
+
+  <style>
+    /* Global styles */
+
+    /* Style for the navbar */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #333;
+      color: #fff;
+      padding: 10px;
+      font-family: Arial, sans-serif;
+      font-size: 16px;
+    }
+
+    /* Style for the navbar items */
+    .navbar-item {
+      color: #fff;
+      text-decoration: none;
+      margin: 0 20px;
+      padding: 5px 10px;
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
+    }
+
+    /* Style for the active navbar item */
+    .navbar-item.active {
+      background-color: #fff;
+      color: #333;
+    }
+
+    /* Style for the hover effect on navbar items */
+    .navbar-item:hover {
+      background-color: #555;
+    }
+
+    body {
+      font-family: "Roboto", sans-serif;
+      font-size: 16px;
+      line-height: 1.5;
+      color: #333;
+      margin: 0;
+      padding: 0;
+    }
+
+    .main-container{
+        margin: 50px;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 36px;
+      margin-top: 0;
+    }
+
+    h2 {
+      font-size: 24px;
+    }
+
+    p {
+      margin: 0 0 20px;
+    }
+
+    ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Navigation bar */
+
+    .navbar {
+      background-color: #333;
+      color: #fff;
+    }
+
+    .navbar ul {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 20px;
+    }
+
+    .navbar li {
+      margin-right: 10px;
+    }
+
+    .navbar li:last-child {
+      margin-right: 0;
+    }
+
+    .navbar a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: bold;
+      transition: color 0.2s;
+    }
+
+    .navbar a:hover {
+      color: #ff8c00;
+    }
+
+    /* Buttons */
+
+    .btn {
+      display: inline-block;
+      background-color: #ff8c00;
+      color: #fff;
+      font-size: 16px;
+      font-weight: bold;
+      text-align: center;
+      text-transform: uppercase;
+      padding: 10px 20px;
+      border-radius: 5px;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .btn:hover {
+      background-color: #ff6f00;
+    }
+
+    /* Tables */
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin-bottom: 20px;
+    }
+
+    table th,
+    table td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+
+    table th {
+      background-color: #f2f2f2;
+      font-weight: bold;
+    }
+
+    table td {
+      vertical-align: top;
+    }
+
+    /* Forms */
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .form-group input[type="text"],
+    .form-group textarea {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 16px;
+      line-height: 1.5;
+      margin-top: 5px;
+    }
+
+    .form-group input[type="submit"] {
+      background-color: #ff8c00;
+      color: #fff;
+      font-size: 16px;
+      font-weight: bold;
+      text-align: center;
+      text-transform: uppercase;
+      padding: 10px 20px;
+      border-radius: 5px;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .form-group input[type="submit"]:hover {
+      background-color: #ff6f00;
+    }
+  </style>
+  <body>
+    <nav class="navbar">
+      <a class="navbar-item" href="aboutus.html">About Us</a>
+      <a class="navbar-item" href="index.html">Predictions</a>
+    </nav>
+
+    <div class="main-container">
+      <h1>Sentiment Analysis using LDA and SVR</h1>
+      <p>
+        This project(prototype) was developed as a solution for the Intel One
+        API challenge-2K23.
+      </p>
+      <p>
+        This project aims to build a predictive model for sentiment analysis
+        using social media data related to a particular brand or product. The
+        model will analyze various features of the social media data, such as
+        the latest news, resources, topic of the media resources, popularity on
+        the social media, to determine consumer sentiment towards the brand or
+        product.
+      </p>
+      <h2>Problem Statement</h2>
+      <p>
+        The goal of this project is to develop a machine learning model that can
+        predict consumer sentiment based on social media activity. To achieve
+        this, we have used LDA (Latent Dirichlet Allocation) for topic modeling
+        and feature extraction, and SVR (Support Vector Regression) for
+        sentiment score prediction.
+      </p>
+      <h2>Dataset</h2>
+      <p>
+        The dataset used for this project is provided in the "training_data.csv"
+        file.
+      </p>
+      <p><strong>Metadata:</strong></p>
+      <ul>
+        <li>IDLink: Unique ID for each record</li>
+        <li>Title: Title of the news article</li>
+        <li>Headline: Headline of the news article</li>
+        <li>Source: Source of the news article</li>
+        <li>Topic: Topic of the news article</li>
+        <li>PublishDate: Date on which the news article was published</li>
+        <li>Facebook: Number of Facebook shares for the news article</li>
+        <li>GooglePlus: Number of Google+ shares for the news article</li>
+        <li>LinkedIn: Number of LinkedIn shares for the news article</li>
+        <li>
+          SentimentTitle: Sentiment score (from -1 to 1) based on the title of
+          the news article
+        </li>
+        <li>
+          SentimentHeadline: Sentiment score (from -1 to 1) based on the
+          headline of the news article
+        </li>
+      </ul>
+      <h2>Model Architecture</h2>
+      <p>The model architecture consists of the following steps:</p>
+      <ul>
+        <li>
+          Feature extraction &amp; then used LDA to classify datapoints into
+          respective topics and themes in the social media data.
+        </li>
+        <li>
+          It is notable that the dataset already has a labeled column with
+          Topic, when we have it what's the necessity of using LDA for
+          classifying the datapoints to respective topics, the LDA algorithm
+          calculates the relation between text and the topic.
+        </li>
+        <li>
+          Sentiment score prediction using SVR based on the features extracted
+          from LDA.
+        </li>
+      </ul>
+      <h2>Results</h2>
+      <p>
+        The results of the model have been generated for the test data in
+        "submission.csv" file. These are the results obtained by using the
+        prototype model.
+      </p>
+      <h2>Requirements</h2>
+      <ul>
+        <li>Python 3.7+</li>
+        <li>pandas</li>
+        <li>numpy</li>
+        <li>scikit-learn</li>
+        <li>gensim</li>
+        <li>nltk</li>
+      </ul>
+      <h2>Usage</h2>
+      <p>
+        Run all the cells of oneAPI.ipynb to see output(this Ipynb file was run
+        on the Intel DevCloud and using the Scikit Learn extentsion by Intel,
+        our team admits that results obtained by using the Intel Extension were
+        so fast that, the ML algorithm felt like it was a normal graph algorithm
+        on our local basic programming laptop).
+      </p>
+      <p>
+        This will preprocess the data, extract features using LDA, train the SVR
+        model, and generate submission file on the test set.
+      </p>
+      <h2>Conclusion</h2>
+      <p>
+        In conclusion, this project demonstrates how LDA and SVR can be used to
+        build a robust sentiment analysis model that can accurately predict
+        consumer sentiment based on social media activity. The model can be used
+        by marketers and businesses to inform their marketing strategies and
+        improve their sales by tailoring their messaging and advertising to
+        appeal to their target audience.
+      </p>
+      <h2>Contact Us</h2>
+      <ul>
+        <li>20211a6645@bvrit.ac.in</li>
+        <li>20211a6604@bvrit.ac.in</li>
+        <li>20211a6644@bvrit.ac.in</li>
+        <li>20211a6616@bvrit.ac.in</li>
+        <li>20211a6602@bvrit.ac.in</li>
+      </ul>
+    </div>
+  </body>
+</html>

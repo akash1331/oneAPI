@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Sentiment Analysis</title>
+    <style>
+      /* Style for the navbar */
+      .navbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #333;
+        color: #fff;
+        padding: 10px;
+        font-family: Arial, sans-serif;
+        font-size: 16px;
+      }
+
+      /* Style for the navbar items */
+      .navbar-item {
+        color: #fff;
+        text-decoration: none;
+        margin: 0 20px;
+        padding: 5px 10px;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+      }
+
+      /* Style for the active navbar item */
+      .navbar-item.active {
+        background-color: #fff;
+        color: #333;
+      }
+
+      /* Style for the hover effect on navbar items */
+      .navbar-item:hover {
+        background-color: #555;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+      .container {
+        width: 600px;
+        margin: 50px auto;
+        text-align: center;
+      }
+      h1 {
+        font-size: 36px;
+        margin-bottom: 30px;
+      }
+      label {
+        font-size: 24px;
+        display: block;
+        margin-bottom: 10px;
+      }
+      input[type="text"] {
+        font-size: 18px;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        margin-bottom: 20px;
+        width: 100%;
+        box-sizing: border-box;
+      }
+      button {
+        font-size: 24px;
+        padding: 10px 20px;
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      button:hover {
+        background-color: #3e8e41;
+      }
+      #result {
+        font-size: 24px;
+        margin-top: 30px;
+        border: 1px solid #ccc;
+        padding: 20px;
+        border-radius: 4px;
+        text-align: left;
+      }
+      #result h2 {
+        margin-top: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar">
+      <a class="navbar-item" href="aboutus.html">About Us</a>
+      <a class="navbar-item" href="index.html">Predictions</a>
+    </nav>
+
+    <div class="container">
+      <h1>Sentiment Analysis</h1>
+      <form method="POST" action="{{ url_for('get_sentiment') }}">
+        <label for="IDLink">Enter IDLink:</label>
+        <input type="text" id="IDLink" name="IDLink" />
+        <br /><br />
+        <button type="submit">Submit</button>
+      </form>
+      <br />
+      {% if sentiment_title %}
+      <div class="output">
+        <h2>Sentiment Title:</h2>
+        <p>{{ sentiment_title }}</p>
+        <h2>Sentiment Headline:</h2>
+        <p>{{ sentiment_headline }}</p>
+      </div>
+      {% endif %}
+    </div>
+
+    <!-- <div class="container">
+        <h1>Get Sentiment</h1>
+        <label for="id">Enter ID:</label>
+        <input type="text" id="id" name="id" placeholder="Enter ID...">
+        <button onclick="getSentiment()">Get Sentiment</button>
+        <div id="result"></div>
+
+        <form action="{{ url_for('predict') }}" method="post">
+            <label for="id">Enter ID:</label>
+            <input type="text" name="id" id="id" required>
+            <button type="submit">Submit</button>
+          </form>
+          <div class="result">
+            {% if sentiment_title and sentiment_headline %}
+              <h2>Sentiment Title: {{ sentiment_title }}</h2>
+              <h2>Sentiment Headline: {{ sentiment_headline }}</h2>
+            {% endif %}
+          </div>
+
+    </div> -->
+    <script>
+        function getSentiment() {
+            var id = document.getElementById("id").value;
+            fetch("/sentiment?id=" + id)
+                .then(response => response.json())
+                .then(data => {
+                    var resultDiv = document.getElementById("result");
+                    resultDiv.innerHTML = "<h2>Sentiment Title:</h2><p>" + data.sentimentTitle + "</p>" + "<h2>Sentiment Headline:</h2><p>" + data.SentimentHeadline + "</p>";
+                });
+        }
+    </script>
+  </body>
+</html>
