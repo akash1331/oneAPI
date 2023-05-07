@@ -31,8 +31,10 @@
 from flask import Flask, request, render_template
 import pandas as pd
 import json
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app, resources={r"/*": {"origins": "*", "methods": ["GET", "POST"],}})
 
 # Load the submission.csv file into a Pandas DataFrame
 df = pd.read_csv("submission.csv")
@@ -45,8 +47,7 @@ def get_sentiment():
     # if request.method == 'GET':
         # Get the IDLink value from the request form data
 
-    _json = request.json        
-    id = _json['IDLink']
+    id = request.form['IDLink']
 
     print(id)
 
@@ -61,10 +62,11 @@ def get_sentiment():
 
     # Return the HTML template with the SentimentTitle and SentimentHeadline values
     # return render_template('index.html', sentiment_title=sentiment_title, sentiment_headline=sentiment_headline)
+    print(result)
     return json.dumps(result)
 
     # Return the HTML template for the initial GET request
     # return render_template('index.html')
 
 if __name__ == '__main__':
-    app.run()
+    app.run(port=3000)

@@ -88,13 +88,7 @@
         margin-top: 0;
       }
     </style>
-    <script>
-      function getdata(){
-
-      }
-      var myObject = {"firstName" : "John", "lastName" : "Doe"};
-      w3.displayObject("output", myObject);
-    </script>
+   
   </head>
   <body>
     <nav class="navbar">
@@ -104,21 +98,20 @@
 
     <div class="container">
       <h1>Sentiment Analysis</h1>
-      <form method="POST" action="{{ url_for('get_sentiment') }}">
+      
+      <form id = "myForm">
         <label for="IDLink">Enter IDLink:</label>
         <input type="text" id="IDLink" name="IDLink" />
         <br /><br />
         <button type="submit">Submit</button>
       </form>
       <br />
-      {% if sentiment_title %}
       <div class="output">
         <h2>Sentiment Title:</h2>
-        {{ sentiment_title }}
+        <div id="title"></div>
         <h2>Sentiment Headline:</h2>
-        <p>{{ sentiment_headline }}</p>
+        <div id="headline"></div>
       </div>
-      {% endif %}
     </div>
 
     <!-- <div class="container">
@@ -142,15 +135,28 @@
 
     </div> -->
     <script>
-        function getSentiment() {
-            var id = document.getElementById("id").value;
-            fetch("/sentiment?id=" + id)
-                .then(response => response.json())
-                .then(data => {
-                    var resultDiv = document.getElementById("result");
-                    resultDiv.innerHTML = "<h2>Sentiment Title:</h2><p>" + data.sentimentTitle.data + "</p>" + "<h2>Sentiment Headline:</h2><p>" + data.SentimentHeadline.data + "</p>";
-                });
+      const form = document.getElementById('myForm');
+      const responseDiv = document.getElementById('response');
+      
+      form.addEventListener('submit', async (event) => {
+        event.preventDefault(); // prevent the form from submitting normally
+        const data = new FormData(form); // get the form data
+        
+        try {
+          const response = await fetch('http://127.0.0.1:3000/', {
+            method: 'POST',
+            body: data
+          });
+          const json = await response.json(); // parse the response as JSON
+          document.getElementById("title").innerText = json['sentiment_title']; // display the response on the page
+          document.getElementById("headline").innerText = json['sentiment_title']; // display the response on the page
+          // responseDiv.innerText = response.body; // display the response on the page÷
+          console.log(response);
+        } catch (error) {
+          console.error(error);
+          responseDiv.innerText = error;
         }
+      });
     </script>
   </body>
 </html>
