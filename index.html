@@ -88,6 +88,13 @@
         margin-top: 0;
       }
     </style>
+    <script>
+      function getdata(){
+
+      }
+      var myObject = {"firstName" : "John", "lastName" : "Doe"};
+      w3.displayObject("output", myObject);
+    </script>
   </head>
   <body>
     <nav class="navbar">
@@ -107,7 +114,7 @@
       {% if sentiment_title %}
       <div class="output">
         <h2>Sentiment Title:</h2>
-        <p>{{ sentiment_title }}</p>
+        {{ sentiment_title }}
         <h2>Sentiment Headline:</h2>
         <p>{{ sentiment_headline }}</p>
       </div>
@@ -141,7 +148,7 @@
                 .then(response => response.json())
                 .then(data => {
                     var resultDiv = document.getElementById("result");
-                    resultDiv.innerHTML = "<h2>Sentiment Title:</h2><p>" + data.sentimentTitle + "</p>" + "<h2>Sentiment Headline:</h2><p>" + data.SentimentHeadline + "</p>";
+                    resultDiv.innerHTML = "<h2>Sentiment Title:</h2><p>" + data.sentimentTitle.data + "</p>" + "<h2>Sentiment Headline:</h2><p>" + data.SentimentHeadline.data + "</p>";
                 });
         }
     </script>

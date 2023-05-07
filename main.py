@@ -30,6 +30,7 @@
 
 from flask import Flask, request, render_template
 import pandas as pd
+import json
 
 app = Flask(__name__)
 
@@ -41,19 +42,25 @@ df = df.set_index('IDLink')
 
 @app.route('/', methods=['GET', 'POST'])
 def get_sentiment():
-    if request.method == 'POST':
+    # if request.method == 'GET':
         # Get the IDLink value from the request form data
-        id = request.form['IDLink']
+    id = request.form['IDLink']
 
-        # Lookup the SentimentTitle and SentimentHeadline values for the given id
-        sentiment_title = df.at[str(id), 'SentimentTitle']
-        sentiment_headline = df.at[str(id), 'SentimentHeadline']
+    # Lookup the SentimentTitle and SentimentHeadline values for the given id
+    sentiment_title = df.at[str(id), 'SentimentTitle']
+    sentiment_headline = df.at[str(id), 'SentimentHeadline']
 
-        # Return the HTML template with the SentimentTitle and SentimentHeadline values
-        return render_template('index.html', sentiment_title=sentiment_title, sentiment_headline=sentiment_headline)
+    result = {
+        "sentiment_title":sentiment_title,
+        "sentiment_headline" : sentiment_headline
+    }
+
+    # Return the HTML template with the SentimentTitle and SentimentHeadline values
+    # return render_template('index.html', sentiment_title=sentiment_title, sentiment_headline=sentiment_headline)
+    return json.dump(result)
 
     # Return the HTML template for the initial GET request
-    return render_template('index.html')
+    # return render_template('index.html')
 
 if __name__ == '__main__':
     app.run()
