@@ -44,7 +44,11 @@ df = df.set_index('IDLink')
 def get_sentiment():
     # if request.method == 'GET':
         # Get the IDLink value from the request form data
-    id = request.form['IDLink']
+
+    _json = request.json        
+    id = _json['IDLink']
+
+    print(id)
 
     # Lookup the SentimentTitle and SentimentHeadline values for the given id
     sentiment_title = df.at[str(id), 'SentimentTitle']
@@ -57,7 +61,7 @@ def get_sentiment():
 
     # Return the HTML template with the SentimentTitle and SentimentHeadline values
     # return render_template('index.html', sentiment_title=sentiment_title, sentiment_headline=sentiment_headline)
-    return json.dump(result)
+    return json.dumps(result)
 
     # Return the HTML template for the initial GET request
     # return render_template('index.html')
